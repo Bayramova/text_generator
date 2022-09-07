@@ -1,5 +1,7 @@
 import re
 
+from pyfillet import WordEmbedder
+
 
 class Dictionary:
     def __init__(self):
@@ -38,3 +40,31 @@ class Corpus:
                 texts_to_ids.append(ids)
 
         return texts_to_ids
+
+
+class TextEmbedder:
+    """Encode text into a sequence of word embeddings.
+    Inputs:
+        - List of unique words.
+    Outputs:
+        - List of embeddings.
+    """
+
+    def __init__(self):
+        self._embedder = WordEmbedder()
+
+    @property
+    def dim(self):
+        """Embedding dimension."""
+        return self._embedder.dim
+
+    @property
+    def embeddings(self):
+        """Dictionary of embeddings for the words."""
+        return self._embedder.embeddings
+
+    def __call__(self, dictionary):
+        embeddings = []
+        for word in dictionary:
+            embeddings.append(self._embedder(word))
+        return embeddings
