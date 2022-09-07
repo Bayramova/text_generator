@@ -53,6 +53,19 @@ pycodestyle = ">=2.9.0,<2.10.0"
 pyflakes = ">=2.5.0,<2.6.0"
 
 [[package]]
+name = "flake8-black"
+version = "0.3.3"
+description = "flake8 plugin to call black as a code style validator"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+black = ">=22.1.0"
+flake8 = ">=3.0.0"
+tomli = "*"
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -123,7 +136,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "49cbc61a92507aa16b7ffb466fe01af8c3e6f40ca308e60c6fffd52e4380461f"
+content-hash = "4567938a332c34af299bb522c6342402d3d08fdf114aa74eb23b557141476d62"
 
 [metadata.files]
 black = []
@@ -133,6 +146,7 @@ click = [
 ]
 colorama = []
 flake8 = []
+flake8-black = []
 mccabe = []
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
