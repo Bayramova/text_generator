@@ -1,5 +1,7 @@
 import re
 
+import torch
+
 from pyfillet import WordEmbedder
 
 
@@ -37,9 +39,9 @@ class Corpus:
                     self.dictionary.add_word(word)
                     # Convert word to corresponding idx
                     ids.append(self.dictionary.word2idx[word])
-                texts_to_ids.append(ids)
+                texts_to_ids.append(torch.tensor(ids, dtype=torch.int64))
 
-        return texts_to_ids
+        return torch.cat(texts_to_ids)
 
 
 class TextEmbedder:
