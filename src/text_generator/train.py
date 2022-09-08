@@ -92,7 +92,7 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
 
 
 def batchify(data, batch_size):
-    # Work out how cleanly we can divide the dataset into bsz parts
+    # Work out how cleanly we can divide the dataset into batch_size parts
     nbatch = data.size(0) // batch_size
     # Trim off any extra elements that wouldn't cleanly fit (remainders)
     data = data.narrow(0, 0, nbatch * batch_size)
@@ -103,6 +103,6 @@ def batchify(data, batch_size):
 
 def get_batch(source, i, seq_len):
     seq_len = min(seq_len, len(source) - 1 - i)
-    data = source[i : i + seq_len]
-    target = source[i + 1 : i + 1 + seq_len].view(-1)
+    data = source[i: i + seq_len]
+    target = source[i + 1: i + 1 + seq_len].view(-1)
     return data, target
