@@ -18,7 +18,17 @@ from text_generator.model import RNNModel
 @click.option(
     "--seq-len", type=int, default=10, show_default=True, help="Sequence length."
 )
-def train(input_dir, batch_size, seq_len):
+@click.option(
+    "--nhid",
+    type=int,
+    default=300,
+    show_default=True,
+    help="Number of hidden units per layer.",
+)
+@click.option(
+    "--nlayers", type=int, default=1, show_default=True, help="Number of layers."
+)
+def train(input_dir, batch_size, seq_len, nhid, nlayers):
     """Script that trains a model and saves it to a file."""
 
     corpus = data.Corpus(input_dir)
@@ -29,9 +39,9 @@ def train(input_dir, batch_size, seq_len):
 
     model = RNNModel(
         ntoken=len(corpus.dictionary),
-        ninp=300,
-        nhid=300,
-        nlayers=1,
+        ninp=embedder.dim,
+        nhid=nhid,
+        nlayers=nlayers,
         weights=pretrained_weights,
     )
 
