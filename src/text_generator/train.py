@@ -33,17 +33,18 @@ from text_generator.model import RNNModel
 @click.option(
     "--nepochs", type=int, default=20, show_default=True, help="Upper epoch limit."
 )
-@click.option("--seed", type=int, default=1111, help="Random seed.")
+@click.option("--seed", type=int, default=1111, show_default=True, help="Random seed.")
 @click.option(
     "--save",
     type=click.Path(),
     default="model.pt",
+    show_default=True,
     help="Path to save the trained model.",
 )
 def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
     """Script that trains a model and saves it to a file."""
 
-    # Set the random seed for reproducibility.
+    # Set the random seed for reproducibility
     torch.manual_seed(seed)
 
     # Load data
@@ -89,6 +90,7 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
 
     # Save the model to file
     torch.save(model, save)
+    click.echo(f"Model is saved to {save}")
 
 
 def batchify(data, batch_size):
@@ -103,6 +105,6 @@ def batchify(data, batch_size):
 
 def get_batch(source, i, seq_len):
     seq_len = min(seq_len, len(source) - 1 - i)
-    data = source[i: i + seq_len]
-    target = source[i + 1: i + 1 + seq_len].view(-1)
+    data = source[i : i + seq_len]
+    target = source[i + 1 : i + 1 + seq_len].view(-1)
     return data, target
