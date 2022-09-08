@@ -30,15 +30,21 @@ from text_generator.model import RNNModel
 )
 def train(input_dir, batch_size, seq_len, nhid, nlayers):
     """Script that trains a model and saves it to a file."""
-
+    # Load data
     corpus = data.Corpus(input_dir)
+    ntoken = len(corpus.dictionary)
+    click.echo(f"Number of unique words in {input_dir}: {ntoken}")
+
+    # Batchify data
     data_batchified = batchify(corpus.data, batch_size)
 
+    # Pretrain word embeddings
     embedder = data.TextEmbedder()
     pretrained_weights = embedder(corpus.dictionary.idx2word)
 
+    # Build the model
     model = RNNModel(
-        ntoken=len(corpus.dictionary),
+        ntoken=ntoken,
         ninp=embedder.dim,
         nhid=nhid,
         nlayers=nlayers,
