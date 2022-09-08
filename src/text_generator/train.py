@@ -1,6 +1,7 @@
 import click
 
 import text_generator.data as data
+from text_generator.model import RNNModel
 
 
 @click.command()
@@ -22,6 +23,17 @@ def train(input_dir, batch_size, seq_len):
 
     corpus = data.Corpus(input_dir)
     data_batchified = batchify(corpus.data, batch_size)
+
+    embedder = data.TextEmbedder()
+    pretrained_weights = embedder(corpus.dictionary.idx2word)
+
+    model = RNNModel(
+        ntoken=len(corpus.dictionary),
+        ninp=300,
+        nhid=300,
+        nlayers=1,
+        weights=pretrained_weights,
+    )
 
 
 def batchify(data, batch_size):
