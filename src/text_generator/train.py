@@ -11,14 +11,20 @@ import text_generator.data as data
     show_default=True,
     help="Path to file with data.",
 )
-def train(input_dir):
+@click.option(
+    "--batch-size", type=int, default=16, show_default=True, help="Batch size."
+)
+@click.option(
+    "--seq-len", type=int, default=10, show_default=True, help="Sequence length."
+)
+def train(input_dir, batch_size, seq_len):
     """Script that trains a model and saves it to a file."""
 
     corpus = data.Corpus(input_dir)
-    data_batchified = batchify(corpus.data)
+    data_batchified = batchify(corpus.data, batch_size)
 
 
-def batchify(data, batch_size=4):
+def batchify(data, batch_size):
     # Work out how cleanly we can divide the dataset into bsz parts
     nbatch = data.size(0) // batch_size
     # Trim off any extra elements that wouldn't cleanly fit (remainders)
@@ -28,8 +34,8 @@ def batchify(data, batch_size=4):
     return data
 
 
-def get_batch(source, i):
-    seq_len = min(10, len(source) - 1 - i)
+def get_batch(source, i, seq_len):
+    seq_len = min(seq_len, len(source) - 1 - i)
     data = source[i : i + seq_len]
     target = source[i + 1 : i + 1 + seq_len].view(-1)
     return data, target
