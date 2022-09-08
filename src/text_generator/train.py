@@ -33,8 +33,12 @@ from text_generator.model import RNNModel
 @click.option(
     "--n-epochs", type=int, default=20, show_default=True, help="Upper epoch limit."
 )
-def train(input_dir, batch_size, seq_len, nhid, nlayers, n_epochs):
+@click.option("--seed", type=int, default=1111, help="Random seed.")
+def train(input_dir, batch_size, seq_len, nhid, nlayers, n_epochs, seed):
     """Script that trains a model and saves it to a file."""
+
+    # Set the random seed for reproducibility.
+    torch.manual_seed(seed)
 
     # Load data
     corpus = data.Corpus(input_dir)
