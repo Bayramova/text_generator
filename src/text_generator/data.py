@@ -1,8 +1,8 @@
 import re
 
-import torch
-
+import numpy as np
 from pyfillet import WordEmbedder
+import torch
 
 
 class Dictionary:
@@ -68,5 +68,8 @@ class TextEmbedder:
     def __call__(self, dictionary):
         embeddings = []
         for word in dictionary:
-            embeddings.append(self._embedder(word))
-        return embeddings
+            embedding = self._embedder(word)
+            embeddings.append(
+                embedding if embedding is not None else np.zeros((self._embedder.dim,))
+            )
+        return torch.tensor(np.array(embeddings), dtype=torch.float32)
