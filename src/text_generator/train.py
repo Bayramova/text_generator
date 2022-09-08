@@ -31,10 +31,16 @@ from text_generator.model import RNNModel
     "--nlayers", type=int, default=1, show_default=True, help="Number of layers."
 )
 @click.option(
-    "--n-epochs", type=int, default=20, show_default=True, help="Upper epoch limit."
+    "--nepochs", type=int, default=20, show_default=True, help="Upper epoch limit."
 )
 @click.option("--seed", type=int, default=1111, help="Random seed.")
-def train(input_dir, batch_size, seq_len, nhid, nlayers, n_epochs, seed):
+@click.option(
+    "--save",
+    type=click.Path(),
+    default="model.pt",
+    help="Path to save the trained model.",
+)
+def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
     """Script that trains a model and saves it to a file."""
 
     # Set the random seed for reproducibility.
@@ -67,7 +73,7 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, n_epochs, seed):
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters())
 
-    for epoch in range(1, n_epochs + 1):
+    for epoch in range(1, nepochs + 1):
         for batch, i in enumerate(range(0, data_batchified.size(0) - 1, seq_len)):
             input, targets = get_batch(data_batchified, i, seq_len)
 
@@ -80,6 +86,9 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, n_epochs, seed):
             optimizer.step()
 
             print(f"| epoch {epoch} | batch {batch} | loss {loss.item():.4f}")
+
+    # Save the model to file
+    torch.save(model, save)
 
 
 def batchify(data, batch_size):
