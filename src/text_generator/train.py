@@ -1,4 +1,6 @@
 import click
+import torch
+import torch.nn as nn
 
 import text_generator.data as data
 from text_generator.model import RNNModel
@@ -28,8 +30,12 @@ from text_generator.model import RNNModel
 @click.option(
     "--nlayers", type=int, default=1, show_default=True, help="Number of layers."
 )
-def train(input_dir, batch_size, seq_len, nhid, nlayers):
+@click.option(
+    "--n-epochs", type=int, default=20, show_default=True, help="Upper epoch limit."
+)
+def train(input_dir, batch_size, seq_len, nhid, nlayers, n_epochs):
     """Script that trains a model and saves it to a file."""
+
     # Load data
     corpus = data.Corpus(input_dir)
     ntoken = len(corpus.dictionary)
@@ -50,6 +56,26 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers):
         nlayers=nlayers,
         weights=pretrained_weights,
     )
+
+    # Training
+    model.train()
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters())
+
+    for epoch in range(1, n_epochs + 1):
+        for batch, i in enumerate(range(0, data_batchified.size(0) - 1, seq_len)):
+            input, targets = get_batch(data_batchified, i, seq_len)
+
+            optimizer.zero_grad()
+
+            output = model(input)
+            loss = criterion(output, targets)
+
+            loss.backward()
+            optimizer.step()
+
+            print(f"| epoch {epoch} | batch {batch} | loss {loss.item():.4f}")
 
 
 def batchify(data, batch_size):
