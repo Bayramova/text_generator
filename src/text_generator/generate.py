@@ -16,12 +16,19 @@ import text_generator.data as data
     "--checkpoint",
     type=click.Path(exists=True, dir_okay=False),
     default="model.pt",
+    show_default=True,
     help="Path to the trained model.",
 )
 @click.option("--prefix", type=str, default=None, show_default=True, help="Seed text.")
-@click.option("--length", type=int, default="10", help="Number of words to generate.")
+@click.option(
+    "--length",
+    type=int,
+    default="10",
+    show_default=True,
+    help="Number of words to generate.",
+)
 def generate(input_dir, checkpoint, prefix, length):
-    """This file generates new sentences sampled from the language model."""
+    """This script generates new sentences sampled from the language model."""
 
     # Load the model
     model = torch.load(checkpoint)
