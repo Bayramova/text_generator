@@ -41,7 +41,14 @@ from text_generator.model import RNNModel
     show_default=True,
     help="Path to save the trained model.",
 )
-def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
+@click.option(
+    "--lr",
+    type=float,
+    default=0.001,
+    show_default=True,
+    help="Learning rate.",
+)
+def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr):
     """Script that trains a model and saves it to a file."""
 
     # Set the random seed for reproducibility
@@ -51,6 +58,7 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
     corpus = data.Corpus(input_dir)
     ntoken = len(corpus.dictionary)
     click.echo(f"Number of unique words in {input_dir}: {ntoken}")
+    click.echo(f"Total number of words: {corpus.data.size(0)}")
 
     # Batchify data
     data_batchified = batchify(corpus.data, batch_size)
@@ -69,10 +77,8 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
     )
 
     # Training
-    model.train()
-
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters())
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
     for epoch in range(1, nepochs + 1):
         for batch, i in enumerate(range(0, data_batchified.size(0) - 1, seq_len)):
@@ -86,7 +92,10 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save):
             loss.backward()
             optimizer.step()
 
-            print(f"| epoch {epoch} | batch {batch} | loss {loss.item():.4f}")
+            if batch % 10 == 0 and batch > 0:
+                print(
+                    f"| epoch {epoch} | {batch}/{len(data_batchified) // seq_len} batches | loss {loss.item():.4f}"
+                )
 
     # Save the model to file
     torch.save(model, save)
