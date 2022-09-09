@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 import text_generator.data as data
-from text_generator.model import RNNModel
+from text_generator.model import LSTMModel
 
 
 @click.command()
@@ -77,7 +77,7 @@ def train(
     pretrained_weights = embedder(corpus.dictionary.idx2word)
 
     # Build the model
-    model = RNNModel(
+    model = LSTMModel(
         ntoken=ntoken,
         ninp=embedder.dim,
         nhid=nhid,

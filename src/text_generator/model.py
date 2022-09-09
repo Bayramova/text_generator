@@ -1,11 +1,11 @@
 import torch.nn as nn
 
 
-class RNNModel(nn.Module):
+class LSTMModel(nn.Module):
     def __init__(self, ntoken, ninp, nhid, nlayers, dropout, weights):
         super().__init__()
         self.encoder = nn.Embedding.from_pretrained(weights)
-        self.rnn = nn.RNN(ninp, nhid, nlayers, dropout)
+        self.rnn = nn.LSTM(ninp, nhid, nlayers, dropout=dropout)
         self.decoder = nn.Linear(nhid, ntoken)
 
         self.ntoken = ntoken
