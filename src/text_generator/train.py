@@ -15,7 +15,7 @@ from text_generator.model import LSTMModel
     help="Path to file with data.",
 )
 @click.option(
-    "--batch-size", type=int, default=16, show_default=True, help="Batch size."
+    "--batch-size", type=int, default=128, show_default=True, help="Batch size."
 )
 @click.option(
     "--seq-len", type=int, default=10, show_default=True, help="Sequence length."
@@ -28,23 +28,15 @@ from text_generator.model import LSTMModel
     help="Number of hidden units per layer.",
 )
 @click.option(
-    "--nlayers", type=int, default=1, show_default=True, help="Number of layers."
+    "--nlayers", type=int, default=2, show_default=True, help="Number of layers."
 )
 @click.option(
     "--nepochs", type=int, default=20, show_default=True, help="Upper epoch limit."
 )
-@click.option("--seed", type=int, default=1111, show_default=True, help="Random seed.")
-@click.option(
-    "--save",
-    type=click.Path(),
-    default="model.pt",
-    show_default=True,
-    help="Path to save the trained model.",
-)
 @click.option(
     "--lr",
     type=float,
-    default=0.001,
+    default=0.0001,
     show_default=True,
     help="Learning rate.",
 )
@@ -54,6 +46,14 @@ from text_generator.model import LSTMModel
     default=0.2,
     show_default=True,
     help="Dropout applied to layers (0 = no dropout).",
+)
+@click.option("--seed", type=int, default=1111, show_default=True, help="Random seed.")
+@click.option(
+    "--save",
+    type=click.Path(),
+    default="model.pt",
+    show_default=True,
+    help="Path to save the trained model.",
 )
 def train(
     input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr, dropout

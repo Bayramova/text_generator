@@ -19,7 +19,13 @@ import text_generator.data as data
     show_default=True,
     help="Path to the trained model.",
 )
-@click.option("--prefix", type=str, default=None, show_default=True, help="Seed text.")
+@click.option(
+    "--prefix",
+    type=str,
+    default=None,
+    show_default=True,
+    help="Seed word (randomly selected from the dictionary, if not given or doesn't exist).",
+)
 @click.option(
     "--length",
     type=int,
