@@ -48,7 +48,16 @@ from text_generator.model import RNNModel
     show_default=True,
     help="Learning rate.",
 )
-def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr):
+@click.option(
+    "--dropout",
+    type=float,
+    default=0.2,
+    show_default=True,
+    help="Dropout applied to layers (0 = no dropout).",
+)
+def train(
+    input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr, dropout
+):
     """Script that trains a model and saves it to a file."""
 
     # Set the random seed for reproducibility
@@ -73,6 +82,7 @@ def train(input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr
         ninp=embedder.dim,
         nhid=nhid,
         nlayers=nlayers,
+        dropout=dropout,
         weights=pretrained_weights,
     )
 

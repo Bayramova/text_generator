@@ -2,10 +2,10 @@ import torch.nn as nn
 
 
 class RNNModel(nn.Module):
-    def __init__(self, ntoken, ninp, nhid, nlayers, weights):
+    def __init__(self, ntoken, ninp, nhid, nlayers, dropout, weights):
         super().__init__()
         self.encoder = nn.Embedding.from_pretrained(weights)
-        self.rnn = nn.RNN(ninp, nhid, nlayers)
+        self.rnn = nn.RNN(ninp, nhid, nlayers, dropout)
         self.decoder = nn.Linear(nhid, ntoken)
 
         self.ntoken = ntoken
