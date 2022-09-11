@@ -13,6 +13,13 @@ import text_generator.data as data
     help="Path to file with training data.",
 )
 @click.option(
+    "--output-dir",
+    type=click.Path(),
+    default="data/generated.txt",
+    show_default=True,
+    help="Path to file to store generated sequences.",
+)
+@click.option(
     "--checkpoint",
     type=click.Path(exists=True, dir_okay=False),
     default="model.pt",
@@ -33,7 +40,7 @@ import text_generator.data as data
     show_default=True,
     help="Number of words to generate.",
 )
-def generate(input_dir, checkpoint, prefix, length):
+def generate(input_dir, output_dir, checkpoint, prefix, length):
     """This script generates new sentences sampled from the language model."""
 
     # Load the model
@@ -46,7 +53,7 @@ def generate(input_dir, checkpoint, prefix, length):
     if prefix is None or prefix not in corpus.dictionary.word2idx:
         # Choose random word from dictionary
         input = torch.randint(ntoken, (1, 1), dtype=torch.int64)
-        click.echo(f"Random prefix: {corpus.dictionary.idx2word[input]}")
+        click.echo(f"Random prefix: {corpus.dictionary.idx2word[input]}\n")
     else:
         input = torch.tensor(corpus.dictionary.word2idx[prefix]).reshape((1, 1))
 
@@ -59,4 +66,10 @@ def generate(input_dir, checkpoint, prefix, length):
         word = corpus.dictionary.idx2word[word_idx]
         quote.append(word)
 
-    click.echo(f'Generated sequence:\n{" ".join(quote)}')
+    sequence = " ".join(quote)
+    click.echo(f"Generated sequence:\n{sequence}\n")
+
+    # Save generated sequence to file
+    with open(output_dir, "a", encoding="utf8") as file:
+        file.write(f"{sequence}\n")
+    click.echo(f"Generated sequence is saved to {output_dir}")
