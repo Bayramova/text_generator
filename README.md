@@ -38,3 +38,13 @@ poetry run black src
 ```
 poetry run flake8 src
 ```
+
+Use [pre-commit](https://pre-commit.com/) to run automated checks when you commit changes.
+Install the  [hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) by running the following command:
+```
+poetry run pre-commit install
+```
+Now pre-commit will run automatically on git commit. To trigger hooks manually for all files use the following command:
+```
+poetry run pre-commit run --all-files
+```
