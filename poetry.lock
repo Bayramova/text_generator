@@ -81,26 +81,25 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "dawg-python"
-version = "0.7.2"
-description = "Pure-python reader for DAWGs (DAFSAs) created by dawgdic C++ library or DAWG Python extension."
+name = "compress-fasttext"
+version = "0.1.3"
+description = "A set of tools to compress gensim fasttext models"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.dependencies]
+gensim = ">=4.0.0"
+numpy = "*"
+
+[package.extras]
+full = ["scikit-learn", "pqkmeans"]
 
 [[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
 category = "dev"
-optional = false
-python-versions = "*"
-
-[[package]]
-name = "docopt"
-version = "0.6.2"
-description = "Pythonic argument parser, that will make you smile"
-category = "main"
 optional = false
 python-versions = "*"
 
@@ -207,14 +206,6 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
-name = "joblib"
-version = "1.1.0"
-description = "Lightweight pipelining with Python functions"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -229,28 +220,6 @@ description = "Experimental type system extensions for programs checked with the
 category = "dev"
 optional = false
 python-versions = "*"
-
-[[package]]
-name = "nltk"
-version = "3.7"
-description = "Natural Language Toolkit"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-click = "*"
-joblib = "*"
-regex = ">=2021.8.3"
-tqdm = "*"
-
-[package.extras]
-all = ["numpy", "pyparsing", "scipy", "matplotlib", "twython", "requests", "scikit-learn", "python-crfsuite"]
-corenlp = ["requests"]
-machine_learning = ["numpy", "python-crfsuite", "scikit-learn", "scipy"]
-plot = ["matplotlib"]
-tgrep = ["pyparsing"]
-twitter = ["twython"]
 
 [[package]]
 name = "nodeenv"
@@ -325,27 +294,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pyfillet"
-version = "0.0.1"
-description = ""
-category = "main"
-optional = false
-python-versions = "*"
-develop = false
-
-[package.dependencies]
-gensim = ">=4.2.0"
-nltk = ">=3.7"
-pymorphy2 = ">=0.9.1"
-tqdm = ">=4.64.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/ivan-chai/pyfillet.git"
-reference = "main"
-resolved_reference = "4b57a6183b72d9489687aaa553802e23e6da5b8f"
-
-[[package]]
 name = "pyflakes"
 version = "2.5.0"
 description = "passive checker of Python programs"
@@ -354,42 +302,10 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pymorphy2"
-version = "0.9.1"
-description = "Morphological analyzer (POS tagger + inflection engine) for Russian language."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-dawg-python = ">=0.7.1"
-docopt = ">=0.6"
-pymorphy2-dicts-ru = ">=2.4,<3.0"
-
-[package.extras]
-fast = ["DAWG (>=0.8)"]
-
-[[package]]
-name = "pymorphy2-dicts-ru"
-version = "2.4.417127.4579844"
-description = "Russian dictionaries for pymorphy2"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
 category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
-name = "regex"
-version = "2022.8.17"
-description = "Alternative regular expression module, to replace re."
-category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -496,23 +412,6 @@ typing-extensions = "*"
 scipy = ["scipy"]
 
 [[package]]
-name = "tqdm"
-version = "4.64.1"
-description = "Fast, Extensible Progress Meter"
-category = "main"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
-
-[package.dependencies]
-colorama = {version = "*", markers = "platform_system == \"Windows\""}
-
-[package.extras]
-dev = ["py-make (>=0.1.0)", "twine", "wheel"]
-notebook = ["ipywidgets (>=6)"]
-slack = ["slack-sdk"]
-telegram = ["requests"]
-
-[[package]]
 name = "typing-extensions"
 version = "4.3.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -553,7 +452,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "d72a7713d7c27253a269ecbb8deb20406d972e1267b6ff978844446fadc219e3"
+content-hash = "eee9548cece64d4d1f76245934e26f65b780a74c99af9ad1d165d6eecab47a98"
 
 [metadata.files]
 attrs = []
@@ -569,9 +468,8 @@ click = [
     {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
 ]
 colorama = []
-dawg-python = []
+compress-fasttext = []
 distlib = []
-docopt = []
 filelock = []
 flake8 = []
 flake8-black = []
@@ -586,13 +484,11 @@ idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
-joblib = []
 mccabe = []
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
-nltk = []
 nodeenv = []
 numpy = []
 pathspec = []
@@ -603,10 +499,7 @@ platformdirs = [
 ]
 pre-commit = []
 pycodestyle = []
-pyfillet = []
 pyflakes = []
-pymorphy2 = []
-pymorphy2-dicts-ru = []
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
     {file = "PyYAML-6.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:9df7ed3b3d2e0ecfe09e14741b857df43adb5a3ddadc919a2d94fbdf78fea53c"},
@@ -642,7 +535,6 @@ pyyaml = [
     {file = "PyYAML-6.0-cp39-cp39-win_amd64.whl", hash = "sha256:b3d267842bf12586ba6c734f89d1f5b871df0273157918b0ccefa29deb05c21c"},
     {file = "PyYAML-6.0.tar.gz", hash = "sha256:68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2"},
 ]
-regex = []
 requests = []
 scipy = [
     {file = "scipy-1.6.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:a15a1f3fc0abff33e792d6049161b7795909b40b97c6cc2934ed54384017ab76"},
@@ -677,7 +569,6 @@ tomli = [
 torch = []
 torchaudio = []
 torchvision = []
-tqdm = []
 typing-extensions = []
 urllib3 = []
 virtualenv = []

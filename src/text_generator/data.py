@@ -1,7 +1,7 @@
 import re
 
+import compress_fasttext
 import numpy as np
-from pyfillet import WordEmbedder
 import torch
 
 
@@ -53,23 +53,15 @@ class TextEmbedder:
     """
 
     def __init__(self):
-        self._embedder = WordEmbedder()
+        self._embedder = compress_fasttext.models.CompressedFastTextKeyedVectors.load(
+            "https://github.com/avidale/compress-fasttext/releases/download/gensim-4-draft/geowac_tokens_sg_300_5_2020-100K-20K-100.bin"
+        )
 
     @property
     def dim(self):
         """Embedding dimension."""
-        return self._embedder.dim
-
-    @property
-    def embeddings(self):
-        """Dictionary of embeddings for the words."""
-        return self._embedder.embeddings
+        return self._embedder.vector_size
 
     def __call__(self, dictionary):
-        embeddings = []
-        for word in dictionary:
-            embedding = self._embedder(word)
-            embeddings.append(
-                embedding if embedding is not None else np.zeros((self._embedder.dim,))
-            )
+        embeddings = [self._embedder[word] for word in dictionary]
         return torch.tensor(np.array(embeddings), dtype=torch.float32)
