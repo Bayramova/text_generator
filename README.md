@@ -1,5 +1,9 @@
 # Text Generator
-This project allows you to generate wolf/patsanskie quotes.
+This project trains a multi-layer LSTM on a language modeling task. The trained model can then be used by the generate script to generate new text.
+
+## Data
+By default, the training script uses the [Russian Twitter Corpus](http://study.mokoron.com/). 
+Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql), save it locally (default path is data/db.sql in repository's root).
 
 ## Usage
 1. Make sure Python 3.9 and [Poetry](https://python-poetry.org/docs/) are installed on your machine (I use Python 3.9.7 and Poetry 1.1.13).
@@ -8,7 +12,11 @@ This project allows you to generate wolf/patsanskie quotes.
 ```
 poetry install --no-dev
 ```
-4. Run train with the following command:
+4. Run following command to create train dataset:
+```
+poetry run create_dataset --input-dir <path to file with data> --output-dir <path to save txt with data> --size <number of sentences to include in dataset>
+```
+5. Run train with the following command:
 ```
 poetry run train --input-dir <path to txt with data> --save <path to save trained model>
 ```
@@ -16,7 +24,7 @@ You can configure additional options (such as hyperparameters) in the CLI. To ge
 ```
 poetry run train --help
 ```
-5. Run generate with the following command:
+6. Run generate with the following command:
 ```
 poetry run generate --input-dir <path to txt with data> --checkpoint <path to trained model> --prefix <seed word> --length <number of words to generate>
 ```
@@ -48,3 +56,8 @@ Now pre-commit will run automatically on git commit. To trigger hooks manually f
 ```
 poetry run pre-commit run --all-files
 ```
+
+## Acknowledgments
+* [corus](https://github.com/natasha/corus) - links to publicly available Russian corpora + API for loading and parsing
+* [razdel](https://github.com/natasha/razdel) - sentence segmentation for Russian language
+* [compress-fasttext](https://github.com/avidale/compress-fasttext) - pre-trained fastText word embeddings for Russian language
