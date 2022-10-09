@@ -96,6 +96,14 @@ numpy = "*"
 full = ["scikit-learn", "pqkmeans"]
 
 [[package]]
+name = "corus"
+version = "0.9.0"
+description = "Links to russian corpora, functions for loading and parsing"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
@@ -310,6 +318,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "razdel"
+version = "0.5.0"
+description = "Splits russian text into tokens, sentences, section. Rule-based"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "requests"
 version = "2.28.1"
 description = "Python HTTP for Humans."
@@ -452,7 +468,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "eee9548cece64d4d1f76245934e26f65b780a74c99af9ad1d165d6eecab47a98"
+content-hash = "df288197f4e529e8873b39a39e69c54540ffb00ac0c24a7ee2323e2274e97d7e"
 
 [metadata.files]
 attrs = []
@@ -469,6 +485,7 @@ click = [
 ]
 colorama = []
 compress-fasttext = []
+corus = []
 distlib = []
 filelock = []
 flake8 = []
@@ -535,6 +552,7 @@ pyyaml = [
     {file = "PyYAML-6.0-cp39-cp39-win_amd64.whl", hash = "sha256:b3d267842bf12586ba6c734f89d1f5b871df0273157918b0ccefa29deb05c21c"},
     {file = "PyYAML-6.0.tar.gz", hash = "sha256:68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2"},
 ]
+razdel = []
 requests = []
 scipy = [
     {file = "scipy-1.6.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:a15a1f3fc0abff33e792d6049161b7795909b40b97c6cc2934ed54384017ab76"},
