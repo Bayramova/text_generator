@@ -7,7 +7,7 @@ By default, the training script uses the [Russian Twitter Corpus](http://study.m
 ## Usage
 1. Make sure Python 3.9 and [Poetry](https://python-poetry.org/docs/) are installed on your machine (I use Python 3.9.7 and Poetry 1.1.13).
 2. Clone this repository to your machine.
-3. Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql) and save it locally (default path is data/db.sql in repository's root).
+3. Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql) and save it locally (default path is *data/db.sql* in repository's root).
 4. Install project dependencies (run this and following commands in a terminal, from the root of cloned repository):
 ```
 poetry install --no-dev
@@ -48,7 +48,7 @@ poetry run flake8 src
 ```
 
 Use [pre-commit](https://pre-commit.com/) to run automated checks when you commit changes.
-Install the  [hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) by running the following command:
+Install the [hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) by running the following command:
 ```
 poetry run pre-commit install
 ```
