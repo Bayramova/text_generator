@@ -3,20 +3,20 @@ This project trains a multi-layer LSTM on a language modeling task. The trained 
 
 ## Data
 By default, the training script uses the [Russian Twitter Corpus](http://study.mokoron.com/). 
-Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql) and save it locally (default path is data/db.sql in repository's root).
 
 ## Usage
 1. Make sure Python 3.9 and [Poetry](https://python-poetry.org/docs/) are installed on your machine (I use Python 3.9.7 and Poetry 1.1.13).
 2. Clone this repository to your machine.
-3. Install project dependencies (run this and following commands in a terminal, from the root of cloned repository):
+3. Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql) and save it locally (default path is data/db.sql in repository's root).
+4. Install project dependencies (run this and following commands in a terminal, from the root of cloned repository):
 ```
 poetry install --no-dev
 ```
-4. Run following command to create train dataset:
+5. Run following command to create train dataset:
 ```
 poetry run create_dataset --input-dir <path to file with data> --output-dir <path to save txt with data> --size <number of sentences to include in dataset>
 ```
-5. Run train with the following command:
+6. Run train with the following command:
 ```
 poetry run train --input-dir <path to txt with data> --save <path to save trained model>
 ```
@@ -24,7 +24,7 @@ You can configure additional options (such as hyperparameters) in the CLI. To ge
 ```
 poetry run train --help
 ```
-6. Run generate with the following command:
+7. Run generate with the following command:
 ```
 poetry run generate --input-dir <path to txt with data> --checkpoint <path to trained model> --prefix <seed word> --length <number of words to generate>
 ```
