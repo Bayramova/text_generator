@@ -3,7 +3,7 @@ This project trains a multi-layer LSTM on a language modeling task. The trained 
 
 ## Data
 By default, the training script uses the [Russian Twitter Corpus](http://study.mokoron.com/). 
-Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql), save it locally (default path is data/db.sql in repository's root).
+Download data manually from [here](https://www.dropbox.com/s/9egqjszeicki4ho/db.sql) and save it locally (default path is data/db.sql in repository's root).
 
 ## Usage
 1. Make sure Python 3.9 and [Poetry](https://python-poetry.org/docs/) are installed on your machine (I use Python 3.9.7 and Poetry 1.1.13).
