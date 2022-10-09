@@ -51,12 +51,29 @@ from text_generator.model import LSTMModel
 @click.option(
     "--save",
     type=click.Path(),
-    default="model.pt",
+    default="models/model.pt",
     show_default=True,
     help="Path to save the trained model.",
 )
+@click.option(
+    "--log-interval",
+    type=int,
+    default=10,
+    show_default=True,
+    help="Report interval.",
+)
 def train(
-    input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr, dropout
+    input_dir,
+    batch_size,
+    seq_len,
+    nhid,
+    nlayers,
+    nepochs,
+    seed,
+    save,
+    lr,
+    dropout,
+    log_interval,
 ):
     """Script that trains a model and saves it to a file."""
 
@@ -102,9 +119,10 @@ def train(
             loss.backward()
             optimizer.step()
 
-            if batch % 10 == 0 and batch > 0:
+            if batch % log_interval == 0 and batch > 0:
                 print(
-                    f"| epoch {epoch} | {batch}/{len(data_batchified) // seq_len} batches | loss {loss.item():.4f}"
+                    f"| epoch {epoch} | {batch} / {len(data_batchified) // seq_len} batches \
+                    | loss {loss.item(): .4f}"
                 )
 
     # Save the model to file

@@ -22,7 +22,7 @@ import text_generator.data as data
 @click.option(
     "--checkpoint",
     type=click.Path(exists=True, dir_okay=False),
-    default="model.pt",
+    default="models/model.pt",
     show_default=True,
     help="Path to the trained model.",
 )
@@ -36,7 +36,7 @@ import text_generator.data as data
 @click.option(
     "--length",
     type=int,
-    default="10",
+    default=10,
     show_default=True,
     help="Number of words to generate.",
 )
