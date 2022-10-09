@@ -5,6 +5,7 @@ description = ""
 authors = ["Sabina Bayramova <sb.sabina00@gmail.com>"]
 
 [tool.poetry.scripts]
+create_dataset = "text_generator.create_dataset:create_dataset"
 train = "text_generator.train:train"
 generate = "text_generator.generate:generate"
 
