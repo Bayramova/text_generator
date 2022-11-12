@@ -40,7 +40,14 @@ import text_generator.data as data
     show_default=True,
     help="Number of words to generate.",
 )
-def generate(input_dir, output_dir, checkpoint, prefix, length):
+@click.option(
+    "--temperature",
+    type=float,
+    default=1.0,
+    show_default=True,
+    help="Temperature - higher will increase diversity.",
+)
+def generate(input_dir, output_dir, checkpoint, prefix, length, temperature):
     """Generates new sentences sampled from the language model."""
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -64,7 +71,8 @@ def generate(input_dir, output_dir, checkpoint, prefix, length):
     generated_sequence = [corpus.dictionary.idx2word[input]]
     for _ in range(length):
         output = model(input)
-        word_weights = torch.nn.functional.softmax(output, dim=1)
+        word_weights = output.div(temperature)
+        word_weights = torch.nn.functional.softmax(word_weights, dim=1)
         word_idx = torch.multinomial(word_weights, 1)
         input.fill_(word_idx.item())
 
