@@ -9,16 +9,16 @@ from text_generator.model import LSTMModel
 @click.command()
 @click.option(
     "--input-dir",
-    type=click.Path(exists=True, dir_okay=False),
-    default="data/data.txt",
+    type=click.Path(exists=True, dir_okay=True),
+    default="data",
     show_default=True,
-    help="Path to file with data.",
+    help="Path to folder with data.",
 )
 @click.option(
     "--batch-size", type=int, default=128, show_default=True, help="Batch size."
 )
 @click.option(
-    "--seq-len", type=int, default=10, show_default=True, help="Sequence length."
+    "--seq-len", type=int, default=7, show_default=True, help="Sequence length."
 )
 @click.option(
     "--nhid",
@@ -31,12 +31,12 @@ from text_generator.model import LSTMModel
     "--nlayers", type=int, default=2, show_default=True, help="Number of layers."
 )
 @click.option(
-    "--nepochs", type=int, default=20, show_default=True, help="Upper epoch limit."
+    "--nepochs", type=int, default=10, show_default=True, help="Upper epoch limit."
 )
 @click.option(
     "--lr",
     type=float,
-    default=0.0001,
+    default=0.3,
     show_default=True,
     help="Learning rate.",
 )
@@ -55,42 +55,31 @@ from text_generator.model import LSTMModel
     show_default=True,
     help="Path to save the trained model.",
 )
-@click.option(
-    "--log-interval",
-    type=int,
-    default=10,
-    show_default=True,
-    help="Report interval.",
-)
 def train(
-    input_dir,
-    batch_size,
-    seq_len,
-    nhid,
-    nlayers,
-    nepochs,
-    seed,
-    save,
-    lr,
-    dropout,
-    log_interval,
+    input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr, dropout
 ):
     """Script that trains a model and saves it to a file."""
 
     # Set the random seed for reproducibility
     torch.manual_seed(seed)
 
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    click.echo(f"Device: {device}\n")
+
     # Load data
     corpus = data.Corpus(input_dir)
     ntoken = len(corpus.dictionary)
     click.echo(f"Number of unique words in {input_dir}: {ntoken}")
-    click.echo(f"Total number of words: {corpus.data.size(0)}")
+    click.echo(
+        f"Total number of words: {corpus.train.size(0) + corpus.valid.size(0)}\n"
+    )
 
     # Batchify data
-    data_batchified = batchify(corpus.data, batch_size)
+    train_data_batchified = batchify(corpus.train, batch_size).to(device)
+    val_data_batchified = batchify(corpus.valid, batch_size).to(device)
 
-    # Pretrain word embeddings
-    embedder = data.TextEmbedder()
+    # Get pretrained word embeddings
+    embedder = data.WordEmbedder()
     pretrained_weights = embedder(corpus.dictionary.idx2word)
 
     # Build the model
@@ -101,29 +90,49 @@ def train(
         nlayers=nlayers,
         dropout=dropout,
         weights=pretrained_weights,
-    )
+    ).to(device)
 
     # Training
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        optimizer, milestones=[3, 6, 9], gamma=0.1
+    )
 
     for epoch in range(1, nepochs + 1):
-        for batch, i in enumerate(range(0, data_batchified.size(0) - 1, seq_len)):
-            input, targets = get_batch(data_batchified, i, seq_len)
+        # Turn on training mode
+        model.train()
+        train_loss = 0
+        for i in range(0, train_data_batchified.size(0) - 1, seq_len):
+            input, targets = get_batch(train_data_batchified, i, seq_len)
 
             optimizer.zero_grad()
 
             output = model(input)
             loss = criterion(output, targets)
-
             loss.backward()
+
             optimizer.step()
 
-            if batch % log_interval == 0 and batch > 0:
-                print(
-                    f"| epoch {epoch} | {batch} / {len(data_batchified) // seq_len} batches \
-                    | loss {loss.item(): .4f}"
-                )
+            train_loss += loss.item()
+        train_loss /= train_data_batchified.size(0)
+
+        # Turn on evaluation mode
+        model.eval()
+        val_loss = 0
+        with torch.no_grad():
+            for i in range(0, val_data_batchified.size(0) - 1, seq_len):
+                input, targets = get_batch(val_data_batchified, i, seq_len)
+
+                output = model(input)
+                loss = criterion(output, targets)
+
+                val_loss += loss.item()
+        val_loss /= val_data_batchified.size(0)
+
+        scheduler.step()
+
+        print(f"| epoch {epoch} | train loss {train_loss} | val loss {val_loss}")
 
     # Save the model to file
     torch.save(model, save)

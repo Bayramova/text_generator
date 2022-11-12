@@ -1,3 +1,4 @@
+import os
 import re
 
 import compress_fasttext
@@ -22,7 +23,8 @@ class Dictionary:
 class Corpus:
     def __init__(self, path):
         self.dictionary = Dictionary()
-        self.data = self.tokenize(path)
+        self.train = self.tokenize(os.path.join(path, "train.txt"))
+        self.valid = self.tokenize(os.path.join(path, "valid.txt"))
 
     def tokenize(self, path):
         """Tokenizes a text file."""
@@ -44,8 +46,8 @@ class Corpus:
         return torch.cat(texts_to_ids)
 
 
-class TextEmbedder:
-    """Encode text into a sequence of word embeddings.
+class WordEmbedder:
+    """Encodes words in dictionary into a sequence of word embeddings.
     Inputs:
         - List of unique words.
     Outputs:

@@ -7,10 +7,10 @@ import text_generator.data as data
 @click.command()
 @click.option(
     "--input-dir",
-    type=click.Path(exists=True, dir_okay=False),
-    default="data/data.txt",
+    type=click.Path(exists=True, dir_okay=True),
+    default="data",
     show_default=True,
-    help="Path to file with training data.",
+    help="Path to folder with data.",
 )
 @click.option(
     "--output-dir",
@@ -36,12 +36,14 @@ import text_generator.data as data
 @click.option(
     "--length",
     type=int,
-    default=10,
+    default=7,
     show_default=True,
     help="Number of words to generate.",
 )
 def generate(input_dir, output_dir, checkpoint, prefix, length):
-    """This script generates new sentences sampled from the language model."""
+    """Generates new sentences sampled from the language model."""
+
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
     # Load the model
     model = torch.load(checkpoint)
@@ -52,24 +54,27 @@ def generate(input_dir, output_dir, checkpoint, prefix, length):
 
     if prefix is None or prefix not in corpus.dictionary.word2idx:
         # Choose random word from dictionary
-        input = torch.randint(ntoken, (1, 1), dtype=torch.int64)
-        click.echo(f"Random prefix: {corpus.dictionary.idx2word[input]}\n")
+        input = torch.randint(ntoken, (1, 1), dtype=torch.int64).to(device)
+        # click.echo(f"Random prefix: {corpus.dictionary.idx2word[input]}\n")
     else:
-        input = torch.tensor(corpus.dictionary.word2idx[prefix]).reshape((1, 1))
+        input = (
+            torch.tensor(corpus.dictionary.word2idx[prefix]).reshape((1, 1)).to(device)
+        )
 
-    quote = [corpus.dictionary.idx2word[input]]
+    generated_sequence = [corpus.dictionary.idx2word[input]]
     for _ in range(length):
         output = model(input)
-        word_idx = torch.multinomial(output, 1)
-        input.fill_(word_idx[0][0])
+        word_weights = torch.nn.functional.softmax(output, dim=1)
+        word_idx = torch.multinomial(word_weights, 1)
+        input.fill_(word_idx.item())
 
         word = corpus.dictionary.idx2word[word_idx]
-        quote.append(word)
+        generated_sequence.append(word)
 
-    sequence = " ".join(quote)
-    click.echo(f"Generated sequence:\n{sequence}\n")
+    generated_sequence = " ".join(generated_sequence)
+    click.echo(f"Generated sequence:\n{generated_sequence}\n")
 
     # Save generated sequence to file
     with open(output_dir, "a", encoding="utf8") as file:
-        file.write(f"{sequence}\n")
+        file.write(f"{generated_sequence}\n")
     click.echo(f"Generated sequence is saved to {output_dir}")

@@ -9,12 +9,10 @@ class LSTMModel(nn.Module):
         self.decoder = nn.Linear(nhid, ntoken)
 
         self.ntoken = ntoken
-        self.nhid = nhid
-        self.nlayers = nlayers
 
     def forward(self, input):
         emb = self.encoder(input)
         output, _ = self.rnn(emb)
         decoded = self.decoder(output)
         decoded = decoded.view(-1, self.ntoken)
-        return nn.functional.softmax(decoded, dim=1)
+        return decoded
