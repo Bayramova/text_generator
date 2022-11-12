@@ -12,13 +12,13 @@ By default, the training script uses the [Russian Twitter Corpus](http://study.m
 ```
 poetry install --no-dev
 ```
-5. Run following command to create train dataset:
+5. Run following command to create train and valid datasets:
 ```
-poetry run create_dataset --input-dir <path to file with data> --output-dir <path to save txt with data> --size <number of sentences to include in dataset>
+poetry run create_dataset --input-dir <path to file with data> --output-dir <path to folder to save created files> --size <number of records to include in dataset>
 ```
 6. Run train with the following command:
 ```
-poetry run train --input-dir <path to txt with data> --save <path to save trained model>
+poetry run train --input-dir <path to file with data> --save <path to save trained model>
 ```
 You can configure additional options (such as hyperparameters) in the CLI. To get a full list of them, use help:
 ```
@@ -26,7 +26,7 @@ poetry run train --help
 ```
 7. Run generate with the following command:
 ```
-poetry run generate --input-dir <path to txt with data> --checkpoint <path to trained model> --prefix <seed word> --length <number of words to generate>
+poetry run generate --input-dir <path to file with data> --checkpoint <path to trained model> --prefix <seed word> --length <number of words to generate>
 ```
 
 ## Development
