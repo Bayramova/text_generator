@@ -1,5 +1,5 @@
 # Text Generator
-This project trains a multi-layer LSTM on a language modeling task. The trained model can then be used by the generate script to generate new text.
+This project trains a multi-layer LSTM model with pre-trained fastText word embeddings on a Russian language modeling task. The trained model can then be used by the generate script to generate new sequences.
 
 ## Data
 By default, the training script uses the [Russian Twitter Corpus](http://study.mokoron.com/). 
