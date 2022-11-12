@@ -15,7 +15,7 @@ from text_generator.model import LSTMModel
     help="Path to folder with data.",
 )
 @click.option(
-    "--batch-size", type=int, default=128, show_default=True, help="Batch size."
+    "--batch-size", type=int, default=16, show_default=True, help="Batch size."
 )
 @click.option(
     "--seq-len", type=int, default=7, show_default=True, help="Sequence length."
@@ -31,7 +31,7 @@ from text_generator.model import LSTMModel
     "--nlayers", type=int, default=2, show_default=True, help="Number of layers."
 )
 @click.option(
-    "--nepochs", type=int, default=10, show_default=True, help="Upper epoch limit."
+    "--nepochs", type=int, default=20, show_default=True, help="Upper epoch limit."
 )
 @click.option(
     "--lr",
