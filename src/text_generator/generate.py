@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 import torch
 
@@ -47,7 +49,14 @@ import text_generator.data as data
     show_default=True,
     help="Temperature - higher will increase diversity.",
 )
-def generate(input_dir, output_dir, checkpoint, prefix, length, temperature):
+def generate(
+    input_dir: Path,
+    output_dir: Path,
+    checkpoint: Path,
+    prefix: str,
+    length: int,
+    temperature: float,
+) -> None:
     """Generates new sentences sampled from the language model."""
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -79,10 +88,10 @@ def generate(input_dir, output_dir, checkpoint, prefix, length, temperature):
         word = corpus.dictionary.idx2word[word_idx]
         generated_sequence.append(word)
 
-    generated_sequence = " ".join(generated_sequence)
-    click.echo(f"Generated sequence:\n{generated_sequence}\n")
+    sequence = " ".join(generated_sequence)
+    click.echo(f"Generated sequence:\n{sequence}\n")
 
     # Save generated sequence to file
     with open(output_dir, "a", encoding="utf8") as file:
-        file.write(f"{generated_sequence}\n")
+        file.write(f"{sequence}\n")
     click.echo(f"Generated sequence is saved to {output_dir}")

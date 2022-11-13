@@ -1,5 +1,6 @@
 from itertools import islice
 import os
+from pathlib import Path
 
 import click
 from corus import load_mokoron
@@ -28,7 +29,7 @@ from razdel import sentenize
     show_default=True,
     help="Number of records to include in dataset.",
 )
-def create_dataset(input_dir, output_dir, size):
+def create_dataset(input_dir: Path, output_dir: Path, size: int) -> None:
     click.echo("Loading dataset...\n")
     records = load_mokoron(input_dir)
     sentences = []

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 import torch
 import torch.nn as nn
@@ -56,8 +58,17 @@ from text_generator.model import LSTMModel
     help="Path to save the trained model.",
 )
 def train(
-    input_dir, batch_size, seq_len, nhid, nlayers, nepochs, seed, save, lr, dropout
-):
+    input_dir: Path,
+    batch_size: int,
+    seq_len: int,
+    nhid: int,
+    nlayers: int,
+    nepochs: int,
+    seed: int,
+    save: Path,
+    lr: float,
+    dropout: float,
+) -> None:
     """Script that trains a model and saves it to a file."""
 
     # Set the random seed for reproducibility
@@ -102,7 +113,7 @@ def train(
     for epoch in range(1, nepochs + 1):
         # Turn on training mode
         model.train()
-        train_loss = 0
+        train_loss = 0.0
         for i in range(0, train_data_batchified.size(0) - 1, seq_len):
             input, targets = get_batch(train_data_batchified, i, seq_len)
 
@@ -119,7 +130,7 @@ def train(
 
         # Turn on evaluation mode
         model.eval()
-        val_loss = 0
+        val_loss = 0.0
         with torch.no_grad():
             for i in range(0, val_data_batchified.size(0) - 1, seq_len):
                 input, targets = get_batch(val_data_batchified, i, seq_len)
@@ -139,7 +150,7 @@ def train(
     click.echo(f"Model is saved to {save}")
 
 
-def batchify(data, batch_size):
+def batchify(data: torch.Tensor, batch_size: int) -> torch.Tensor:
     # Work out how cleanly we can divide the dataset into batch_size parts
     nbatch = data.size(0) // batch_size
     # Trim off any extra elements that wouldn't cleanly fit (remainders)
@@ -149,7 +160,9 @@ def batchify(data, batch_size):
     return data
 
 
-def get_batch(source, i, seq_len):
+def get_batch(
+    source: torch.Tensor, i: int, seq_len: int
+) -> tuple[torch.Tensor, torch.Tensor]:
     seq_len = min(seq_len, len(source) - 1 - i)
     data = source[i : i + seq_len]
     target = source[i + 1 : i + 1 + seq_len].view(-1)

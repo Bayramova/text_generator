@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import re
 
 import compress_fasttext
@@ -7,26 +8,26 @@ import torch
 
 
 class Dictionary:
-    def __init__(self):
-        self.word2idx = {}
-        self.idx2word = []
+    def __init__(self) -> None:
+        self.word2idx: dict[str, int] = {}
+        self.idx2word: list[str] = []
 
-    def add_word(self, word):
+    def add_word(self, word: str) -> None:
         if word not in self.word2idx:
             self.idx2word.append(word)
             self.word2idx[word] = len(self.idx2word) - 1
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.idx2word)
 
 
 class Corpus:
-    def __init__(self, path):
+    def __init__(self, path: Path) -> None:
         self.dictionary = Dictionary()
         self.train = self.tokenize(os.path.join(path, "train.txt"))
         self.valid = self.tokenize(os.path.join(path, "valid.txt"))
 
-    def tokenize(self, path):
+    def tokenize(self, path: str) -> torch.Tensor:
         """Tokenizes a text file."""
         TOKEN_RE = re.compile(r"[а-яА-Я]+")
 
@@ -54,16 +55,16 @@ class WordEmbedder:
         - List of embeddings.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._embedder = compress_fasttext.models.CompressedFastTextKeyedVectors.load(
             "https://github.com/avidale/compress-fasttext/releases/download/gensim-4-draft/geowac_tokens_sg_300_5_2020-100K-20K-100.bin"
         )
 
     @property
-    def dim(self):
+    def dim(self) -> int:
         """Embedding dimension."""
         return self._embedder.vector_size
 
-    def __call__(self, dictionary):
+    def __call__(self, dictionary: list[str]) -> torch.Tensor:
         embeddings = [self._embedder[word] for word in dictionary]
         return torch.tensor(np.array(embeddings), dtype=torch.float32)

@@ -2,7 +2,7 @@
 This project trains a multi-layer LSTM model with pre-trained fastText word embeddings on a Russian language modeling task. The trained model can then be used by the generate script to generate new sequences.
 
 ## Data
-By default, the training script uses the [Russian Twitter Corpus](http://study.mokoron.com/). 
+By default, the training script uses the [Russian Twitter Corpus](http://study.mokoron.com/).
 
 ## Usage
 1. Make sure Python 3.9 and [Poetry](https://python-poetry.org/docs/) are installed on your machine (I use Python 3.9.7 and Poetry 1.1.13).
