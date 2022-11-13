@@ -31,7 +31,7 @@ poetry run generate --input-dir <path to file with data> --checkpoint <path to t
 
 ## Development
 
-The code in this repository must be linted with flake8 and formatted with black before being commited to the repository.
+The code in this repository must be linted with flake8, formatted with black, and pass mypy typechecking before being commited to the repository.
 
 Install all requirements (including dev requirements) to poetry environment:
 ```
@@ -45,6 +45,10 @@ poetry run black src
 ```
 ```
 poetry run flake8 src
+```
+Type annotate your code, run [mypy](https://github.com/python/mypy) to ensure the types are correct:
+```
+poetry run mypy src
 ```
 
 Use [pre-commit](https://pre-commit.com/) to run automated checks when you commit changes.
