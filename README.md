@@ -1,4 +1,4 @@
-# Text Generator
+# Word-level Language Modeling
 This project trains a multi-layer LSTM model with pre-trained fastText word embeddings on a Russian language modeling task. The trained model can then be used by the generate script to generate new sequences.
 
 ## Data
